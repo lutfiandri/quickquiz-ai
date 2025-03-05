@@ -19,6 +19,37 @@
 			file = files[0];
 		}
 	}
+
+	async function uploadFile() {
+		if (!file) {
+			alert('Please select a file first.');
+			return;
+		}
+
+		const formData = new FormData();
+		formData.append('file', file);
+
+		try {
+			const response = await fetch('/api/pdf-loader', {
+				method: 'POST',
+				body: formData
+			});
+
+			const { text: fileText } = await response.json();
+
+			const response2 = await fetch('/api/generate-questions', {
+				method: 'POST',
+				body: JSON.stringify({
+					fileText
+				})
+			});
+			const { aiMessage } = await response2.json();
+			console.log(aiMessage);
+		} catch (error) {
+			console.error('Upload failed:', error);
+			alert('Failed to upload file.');
+		}
+	}
 </script>
 
 <div class="container flex min-h-screen flex-col items-center justify-center gap-8">
@@ -38,5 +69,5 @@
 		<label for="file" class="fieldset-label">Max size 5MB</label>
 	</fieldset>
 
-	<div class="btn btn-primary font-bold">Generate Quiz!</div>
+	<button class="btn btn-primary font-bold" onclick={uploadFile}>Generate Quiz!</button>
 </div>
