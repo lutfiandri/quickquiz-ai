@@ -7,6 +7,11 @@
 	themes: cupcake;
 }
 
+@utility container {
+	padding-inline: 2rem;
+	margin-inline: auto;
+}
+
 * {
 	font-family: 'Nunito', sans-serif;
 }
