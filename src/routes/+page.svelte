@@ -1,4 +1,7 @@
 <script lang="ts">
+	import type { Quiz } from '$lib/langchain-response-formatter';
+	import { quiz } from '$lib/store.svelte';
+
 	let file = $state<File>();
 
 	$effect(() => {
@@ -43,8 +46,8 @@
 					fileText
 				})
 			});
-			const { aiMessage } = await response2.json();
-			console.log(aiMessage);
+			const data2: { quiz: Quiz } = await response2.json();
+			quiz.questions = data2.quiz.questions;
 		} catch (error) {
 			console.error('Upload failed:', error);
 			alert('Failed to upload file.');
@@ -70,4 +73,6 @@
 	</fieldset>
 
 	<button class="btn btn-primary font-bold" onclick={uploadFile}>Generate Quiz!</button>
+
+	<div>{JSON.stringify(quiz)}</div>
 </div>

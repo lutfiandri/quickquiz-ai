@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const LangchainResponseFormatter = z.object({
+export const QuizSchema = z.object({
 	questions: z.array(
 		z.object({
 			text: z.string().describe("the question's text"),
@@ -16,3 +16,5 @@ export const LangchainResponseFormatter = z.object({
 		})
 	)
 });
+
+export type Quiz = z.infer<typeof QuizSchema>;

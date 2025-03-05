@@ -1,4 +1,5 @@
-import { LangchainResponseFormatter } from '$lib/langchain-response-formatter';
+import { QuizSchema } from '$lib/langchain-response-formatter';
+import type { Quiz } from '$lib/langchain-response-formatter';
 import { ChatOpenAI } from '@langchain/openai';
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from '@sveltejs/kit';
@@ -12,7 +13,7 @@ export const POST: RequestHandler = async ({ request }) => {
 		temperature: 0
 	});
 
-	const modelWithStructure = model.withStructuredOutput(LangchainResponseFormatter);
+	const modelWithStructure = model.withStructuredOutput(QuizSchema);
 
 	const aiMessage = await modelWithStructure.invoke(`
 	You are an AI agent designed to generate questions based on the content of a file.
@@ -24,5 +25,7 @@ export const POST: RequestHandler = async ({ request }) => {
 	${text}
 	`);
 
-	return json({ aiMessage: aiMessage });
+	const quiz = QuizSchema.parse(aiMessage);
+
+	return json({ quiz: quiz });
 };
