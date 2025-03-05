@@ -4,14 +4,10 @@
 	import { quiz } from '$lib/store.svelte';
 
 	let file = $state<File>();
-
-	$effect(() => {
-		console.log(file);
-	});
+	let loading = $state(false);
 
 	function handleFileChange(event: Event) {
 		const target = event.target as HTMLInputElement;
-		console.log(target.files);
 		const files = target.files as FileList;
 		if (files.length > 0) {
 			if (files[0].size > 5 * 1024 * 1024) {
@@ -25,6 +21,8 @@
 	}
 
 	async function uploadFile() {
+		loading = true;
+
 		if (!file) {
 			alert('Please select a file first.');
 			return;
@@ -50,6 +48,10 @@
 			const data2: { quiz: Quiz } = await response2.json();
 			quiz.questions = data2.quiz.questions;
 
+			console.log(quiz.questions);
+
+			await new Promise((resolve) => setTimeout(resolve, 1000));
+
 			goto('/quiz');
 		} catch (error) {
 			console.error('Upload failed:', error);
@@ -61,7 +63,7 @@
 <div class="container flex min-h-screen flex-col items-center justify-center gap-8">
 	<div class="flex flex-col items-center gap-2">
 		<h1 class="text-6xl font-black">QuickQuiz AI</h1>
-		<p class="text-xl">Turn your PDFs into a Quiz—instantly!</p>
+		<p class="text-xl">Turn your PDF into a Quiz—instantly!</p>
 	</div>
 
 	<fieldset class="fieldset w-full max-w-2xl">
@@ -75,5 +77,7 @@
 		<label for="file" class="fieldset-label">Max size 5MB</label>
 	</fieldset>
 
-	<button class="btn btn-primary font-bold" onclick={uploadFile}>Generate Quiz!</button>
+	<button class={['btn btn-primary font-bold', loading && 'btn-disabled']} onclick={uploadFile}
+		>{loading ? 'Loading... It may take a few seconds' : 'Generate Quiz!'}</button
+	>
 </div>

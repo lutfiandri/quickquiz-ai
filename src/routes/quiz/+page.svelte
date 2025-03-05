@@ -3,11 +3,8 @@
 	import { quiz, quizProgress } from '$lib/store.svelte';
 
 	let question = $derived(quiz.questions.at(quizProgress.activeQuestionIndex));
-	$effect(() => {
-		if (!question) {
-			goto('/');
-		}
-	});
+
+	let correctIndex = $derived(question?.options.findIndex((option) => option.correct));
 
 	let answerIndex = $state(-1);
 
@@ -18,14 +15,22 @@
 		}
 
 		answerIndex = Number(target.value);
-	}
-
-	function handleNext() {
-		quizProgress.activeQuestionIndex += 1;
-		answerIndex = -1;
+		if (answerIndex === correctIndex) {
+			quizProgress.score += 1;
+		}
 	}
 
 	let isLastQuestion = $derived(quizProgress.activeQuestionIndex === quiz.questions.length - 1);
+
+	function handleNext() {
+		if (isLastQuestion) {
+			goto('/result');
+			return;
+		}
+
+		quizProgress.activeQuestionIndex += 1;
+		answerIndex = -1;
+	}
 </script>
 
 <div class="container max-w-2xl">
@@ -43,7 +48,7 @@
 					<div class="w-full">
 						<button
 							class={[
-								'btn btn-lg min-h-[12vh] w-full',
+								'btn btn-lg h-auto min-h-[12vh] w-full py-3',
 								answerIndex !== -1 && option.correct && 'btn-accent',
 								answerIndex !== -1 && answerIndex === index && !option.correct && 'btn-error'
 							]}

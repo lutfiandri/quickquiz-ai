@@ -19,6 +19,7 @@ export const POST: RequestHandler = async ({ request }) => {
 	You are an AI agent designed to generate questions based on the content of a file.
 	
 	Please generate 10 questions, with each question having 4 options and an explanation for the correct answer.
+	You MUST generate the correct options in a random order for each question.
 	
 	You MUST generate questions ONLY FROM TEXT BELOW:
 
