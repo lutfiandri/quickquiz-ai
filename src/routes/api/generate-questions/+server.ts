@@ -10,7 +10,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
 	const model = new ChatOpenAI({
 		modelName: 'gpt-4o-mini',
-		temperature: 0
+		temperature: 0.2
 	});
 
 	const modelWithStructure = model.withStructuredOutput(QuizSchema);
