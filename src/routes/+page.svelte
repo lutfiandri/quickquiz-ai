@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import type { Quiz } from '$lib/langchain-response-formatter';
 	import { quiz } from '$lib/store.svelte';
 
@@ -48,6 +49,8 @@
 			});
 			const data2: { quiz: Quiz } = await response2.json();
 			quiz.questions = data2.quiz.questions;
+
+			goto('/quiz');
 		} catch (error) {
 			console.error('Upload failed:', error);
 			alert('Failed to upload file.');
@@ -73,6 +76,4 @@
 	</fieldset>
 
 	<button class="btn btn-primary font-bold" onclick={uploadFile}>Generate Quiz!</button>
-
-	<div>{JSON.stringify(quiz)}</div>
 </div>
