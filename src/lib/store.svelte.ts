@@ -17,6 +17,5 @@ export const quiz = $state<Quiz>({
 
 export const quizProgress = $state({
 	activeQuestionIndex: 0,
-	score: 0,
-	answers: [] // array of option (0,1,2,3)
+	score: 0
 });

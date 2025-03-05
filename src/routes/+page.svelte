@@ -4,6 +4,7 @@
 	import { quiz } from '$lib/store.svelte';
 
 	let file = $state<File>();
+	let questionNumber = $state(10);
 	let loading = $state(false);
 
 	function handleFileChange(event: Event) {
@@ -66,16 +67,22 @@
 		<p class="text-xl">Turn your PDF into a Quiz—instantly!</p>
 	</div>
 
-	<fieldset class="fieldset w-full max-w-2xl">
-		<input
-			id="file"
-			type="file"
-			accept="application/pdf"
-			class="file-input w-full"
-			onchange={handleFileChange}
-		/>
-		<label for="file" class="fieldset-label">Max size 5MB</label>
-	</fieldset>
+	<div class="flex w-full max-w-2xl flex-col gap-2">
+		<fieldset class="fieldset w-full">
+			<legend class="fieldset-legend">How many question do you want?</legend>
+			<input type="text" class="input w-full" placeholder="Type here" bind:value={questionNumber} />
+		</fieldset>
+		<fieldset class="fieldset w-full">
+			<input
+				id="file"
+				type="file"
+				accept="application/pdf"
+				class="file-input w-full"
+				onchange={handleFileChange}
+			/>
+			<label for="file" class="fieldset-label">Max size 5MB</label>
+		</fieldset>
+	</div>
 
 	<button class={['btn btn-primary font-bold', loading && 'btn-disabled']} onclick={uploadFile}
 		>{loading ? 'Loading... It may take a few seconds' : 'Generate Quiz!'}</button

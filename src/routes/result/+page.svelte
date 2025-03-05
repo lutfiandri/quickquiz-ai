@@ -9,6 +9,8 @@
 	}
 
 	function handleBackToHome() {
+		quizProgress.score = 0;
+		quizProgress.activeQuestionIndex = 0;
 		goto('/');
 	}
 </script>
